@@ -71,18 +71,20 @@ def prepare(args: argparse.Namespace):
     """
 
     output_dir = get_output_dir(args)
-    # check output_dir exist
-    if os.path.isdir(output_dir):
-        raise ValueError(f"output_dir {output_dir} already exist. Exit.")
-    else:
-        os.mkdir(output_dir)
-
-    # copy code
     code_dir = os.path.join(output_dir, "code")
     project_dirname = os.path.basename(os.getcwd())
-    cmd = f"cd ..; rsync -ar {project_dirname} {code_dir} --exclude='*.out'"
-    print(cmd)
-    runcmd(cmd)
+
+    # check output_dir exist
+    if os.path.isdir(output_dir):
+        # if using slurm
+        if has_slurm() and not args.no_slurm:
+            raise ValueError(f"output_dir {output_dir} already exist. Exit.")
+    else:
+        os.mkdir(output_dir)
+        # copy code
+        cmd = f"cd ..; rsync -ar {project_dirname} {code_dir} --exclude='*.out'"
+        print(cmd)
+        runcmd(cmd)
     return os.path.join(code_dir, project_dirname)
 
 
@@ -98,7 +100,8 @@ def submit_job(args: argparse.Namespace):
     output_dir = get_output_dir(args)
     code_dir = prepare(args)
 
-    init_cmd = f" cd {code_dir}; export MASTER_PORT={random_port()}; "
+    master_port = os.environ.get("MASTER_PORT", random_port())
+    init_cmd = f" cd {code_dir}; export MASTER_PORT={master_port}; "
 
     if has_slurm() and not args.no_slurm:
         # prepare slurm args.

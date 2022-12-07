@@ -1,11 +1,15 @@
-# VindLU :curry:
+# VindLU <img src="./imgs/vindlu.png" style="width: 40px">
 
-VindLU :curry: : A Recipe for Effective Video-and-Language Pretraining [[arXiv]()] [[project page](https://klauscc.github.io/vindlu.html)]
+VindLU <img src="./imgs/vindlu.png" style="width: 20px">: A Recipe for Effective Video-and-Language Pretraining [[arXiv]()] [[project page](https://klauscc.github.io/vindlu.html)]
 
 [Feng Cheng](https://klauscc.github.io), [Xizi Wang](), [Jie Lei](https://jayleicn.github.io/), [David Crandall](https://luddy.indiana.edu/contact/profile/?David_Crandall), [Mohit Bansal](http://www.cs.unc.edu/~mbansal/), [Gedas Bertasius](https://www.gedasbertasius.com/)
 
 
 Official PyTorch code for VindLU, a recipe for effective Video-and-Language (VidL) Pretraining. 
+
+#### News:
+
+- 2022-12-07: Our annotation files and **trained checkpoints** are available on [Google Drive](https://drive.google.com/drive/folders/12bC7WotvwyTG4pVvYeU4iZzmBLP1-6d9?usp=sharing).
 
 #### Highlights:
 - Revealed the importance of each component in VidL pretraining (see our paper for details).
@@ -16,7 +20,7 @@ Official PyTorch code for VindLU, a recipe for effective Video-and-Language (Vid
 <img src="./imgs/teaser.jpg" style="width: 95%">
 </p>
 
-#### Performance
+## Results
 
 ##### Text-to-video Retrieval
 <p align="center">
@@ -82,11 +86,13 @@ The annotation file is in `json` format, which can be loaded as a list of dictio
 
 ### Training and Inference
 
-All the tasks can launched via the python script `tools/run.py`. 
+All the tasks can be launched via the python script `tools/run.py`. 
 
-> It supports running with and without [slurm](https://slurm.schedmd.com/). If the server doesn't have slurm, only **single-node** multi-gpu training is supported. 
+- Support **slurm** and **run locally**.
 
-> It will use slurm if command `sbatch` exists. You can force to use local mode by add arguments `--no_slurm`.
+> If there is no slurm, you need to submit the training script to each node.
+
+> It will use slurm if command `sbatch` exists. You can force to run locally by add the argument `--no_slurm`.
 
 **Our trained checkpoints are available on [Google Drive](https://drive.google.com/drive/folders/12bC7WotvwyTG4pVvYeU4iZzmBLP1-6d9?usp=sharing)**
 
@@ -118,19 +124,38 @@ Example for pretraining on webvid_cc3m (5M):
 ``` bash
 corpus="webvid_cc3m"
 pt_name=pt_${corpus}_8x64
-python tools/run.py --nnodes 1 --npgus 8 --task pretrain \
+python tools/run.py --nnodes 2 --ngpus 4 --task pretrain \
     --jobname $pt_name \
     --config configs/pretrain.py \
     --model_args "train_corpus ${corpus} criterion.loss_weight.vtc 1.0"
 ```
+You can use this script if 1) with slurm or 2) no slurm but only 1 node is used.
 
-> Remember to add `--slurm_args SLURM_ARGS` according to your cluster's settings. The same for the following examples.
+> If using slurm, remember to add `--slurm_args SLURM_ARGS` according to your cluster's settings. The same for the following examples.
 
 You can change `corpus` to "webvid_14m" for 17M corpus and "webvid10m_14m" for 25M corpus. 
 
 > See variable `available_corpus` in [configs/data.py](configs/data.py) for all the supported pretraining corpus. 
-
 > You can add your own datasets by adding them to `available_corpus`.
+
+##### Multi-node pretrain without slurm
+The following example will do pretrain on 2 nodes with 4 GPUs per node.
+
+When running locally without slurm, you need  
+- **specify the `MASTER_ADDR` and `MASTER_PORT` explicitly** to make sure all the nodes use the same endpoint.
+- run the script **on each node**.
+``` bash
+export MASTER_ADDR="ip address of master node" # change to your real ip.
+export MASTER_PORT=40041 # some unused port.
+corpus="webvid_cc3m"
+pt_name=pt_${corpus}_8x64
+python tools/run.py --nnodes 2 --ngpus 4 --task pretrain \
+    --jobname $pt_name \
+    --config configs/pretrain.py \
+    --model_args "train_corpus ${corpus} criterion.loss_weight.vtc 1.0" \
+    --no_slurm
+
+```
 
 #### Finetuning and Evaluation
 
@@ -149,13 +174,13 @@ if [[ "$dataset" == *"msrvtt"* ]]; then ngpus=4; else ngpus=1; fi
 if [[ "$dataset" == *"anet"* ]]; then nfrm_test=32; else nfrm_test=12; fi
 
 # finetune
-python tools/run.py --nnodes 1 --npgus ${ngpus} --task retrieval \
+python tools/run.py --nnodes 1 --ngpus ${ngpus} --task retrieval \
     --jobname ${ft_name} --dep_jobname ${pt_name} \
     --config configs/ret_${dataset}.py \
     --model_args "pretrained_path $VL_EXP_DIR/${pt_name}/ckpt_09.pth"
 
 # evaluation
-python tools/run.py --nnodes 1 --npgus ${ngpus} --task retrieval \
+python tools/run.py --nnodes 1 --ngpus ${ngpus} --task retrieval \
     --jobname ${ft_name}/eval_${nfrm_test}frm --dep_jobname ${ft_name} \
     --config configs/ret_${dataset}.py \
     --model_args "pretrained_path $VL_EXP_DIR/${ft_name}/ckpt_best.pth \
@@ -175,13 +200,13 @@ ngpus=1
 if [[ "$dataset" == *"anet"* ]]; then nfrm_test=32; else nfrm_test=12; fi
 
 # finetune
-python tools/run.py --nnodes 1 --npgus ${ngpus} --task vqa \
+python tools/run.py --nnodes 1 --ngpus ${ngpus} --task vqa \
     --jobname ${ft_name} --dep_jobname ${pt_name} \
     --config configs/qa_${dataset}.py \
     --model_args "pretrained_path $VL_EXP_DIR/${pt_name}/ckpt_09.pth"
 
 # evaluation
-python tools/run.py --nnodes 1 --npgus ${ngpus} --task vqa \
+python tools/run.py --nnodes 1 --ngpus ${ngpus} --task vqa \
     --jobname ${ft_name}/eval_${nfrm_test}frm --dep_jobname ${ft_name} \
     --config configs/qa_${dataset}.py \
     --model_args "pretrained_path $VL_EXP_DIR/${ft_name}/ckpt_best.pth \
@@ -190,12 +215,12 @@ python tools/run.py --nnodes 1 --npgus ${ngpus} --task vqa \
 
 - MSRVTT-MC (multiple-choice). We directly evaluate using the fintuned retrieval model.
 
-```
+``` bash
 pt_name=pt_webvid_cc3m_8x64
 ft_name=ft_12frm-${pt_name}-ret_msrvtt
 
 # evaluation
-python tools/run.py --nnodes 1 --npgus 1 --task retrieval_mc \
+python tools/run.py --nnodes 1 --ngpus 1 --task retrieval_mc \
     --jobname ${ft_name}/eval_${nfrm_test}frm-mc --dep_jobname ${ft_name} \
     --config configs/ret_msrvtt_mc.py \
     --model_args "pretrained_path $VL_EXP_DIR/${ft_name}/ckpt_best.pth \

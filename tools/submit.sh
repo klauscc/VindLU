@@ -17,7 +17,7 @@ if [[ "$mode" == "slurm" ]]; then # slurm
 	bin="srun"
 
 else # local
-	rdzv_endpoint="localhost:${MASTER_PORT:-40000}"
+	rdzv_endpoint="${MASTER_ADDR:-localhost}:${MASTER_PORT:-40000}"
 	bin=""
 fi
 
