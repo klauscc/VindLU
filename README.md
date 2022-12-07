@@ -9,7 +9,7 @@ Official PyTorch code for VindLU, a recipe for effective Video-and-Language (Vid
 
 #### Highlights:
 - Revealed the importance of each component in VidL pretraining (see our paper for details).
-- Cheap to train: 82 V100 GPU days to train on jointly 10M video and 15M image datasets; 15 V100 days on 5M datasets.
+- Cheap to train: 82 V100 GPU days to train on joint 10M video and 15M image datasets; 15 V100 days on 5M datasets.
 - State-of-the-art performance on video retrieval task and VidQA task. Specifically, our model achieves 61.2%(**+7.8%**) R@1 on DiDeMo and 55.0%(**+6.1%**) on ActivityNet-Captions.
 
 <p align="center">
@@ -88,7 +88,7 @@ All the tasks can launched via the python script `tools/run.py`.
 
 > It will use slurm if command `sbatch` exists. You can force to use local mode by add arguments `--no_slurm`.
 
-**Our trained checkpoints are available in [Google Drive](https://drive.google.com/drive/folders/12bC7WotvwyTG4pVvYeU4iZzmBLP1-6d9?usp=sharing)**
+**Our trained checkpoints are available on [Google Drive](https://drive.google.com/drive/folders/12bC7WotvwyTG4pVvYeU4iZzmBLP1-6d9?usp=sharing)**
 
 Usage:
 ``` bash
@@ -195,7 +195,7 @@ pt_name=pt_webvid_cc3m_8x64
 ft_name=ft_12frm-${pt_name}-ret_msrvtt
 
 # evaluation
-python tools/run.py --nnodes 1 --npgus ${ngpus} --task retrieval_mc \
+python tools/run.py --nnodes 1 --npgus 1 --task retrieval_mc \
     --jobname ${ft_name}/eval_${nfrm_test}frm-mc --dep_jobname ${ft_name} \
     --config configs/ret_msrvtt_mc.py \
     --model_args "pretrained_path $VL_EXP_DIR/${ft_name}/ckpt_best.pth \
