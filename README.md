@@ -106,7 +106,7 @@ python tools/run.py --slurm_args SLURM_ARGS --jobname JOBNAME \
 - `SLURM_ARGS`: the additional arguments for slurm. You can set the default arguments (`DEFAULT_SLURM_ARGS` in [tools/run.py](tools/run.py)). `SLURM_ARGS` will override the default arguments.
 - `JOBNAME`: The experiment name and job_name in slurm. All the outputs (checkpoint and logs) will be write to `$VL_EXP_DIR/JOBNAME`.
 - `DEP_JOBNAME`: The dependent job. This job will start only when `DEP_JOBNAME` is finished. You can use this feature to submit your pretraining, finetuning and evaluation jobs in the same time. Only valid when slurm is available.
-- `NNODES`: The number of nodes to use. Only 1 is supported if no slurm.
+- `NNODES`: The number of nodes to use.
 - `NGPUS`: How many GPUs to use in each node.
 - `TASK`: This job will run the script `tasks/TASK.py` in [tasks](tasks). Supported tasks: 
     - "pretrain": for pretraining.
@@ -139,11 +139,11 @@ You can change `corpus` to "webvid_14m" for 17M corpus and "webvid10m_14m" for 2
 > You can add your own datasets by adding them to `available_corpus`.
 
 ##### Multi-node pretrain without slurm
-The following example will do pretrain on 2 nodes with 4 GPUs per node.
+The following example will do pretrain on 2 nodes with 4 GPUs per node without slurm.
 
 When running locally without slurm, you need  
 - **specify the `MASTER_ADDR` and `MASTER_PORT` explicitly** to make sure all the nodes use the same endpoint.
-- run the script **on each node**.
+- run the script **on each node**. The logs will only display on the master node.
 ``` bash
 export MASTER_ADDR="ip address of master node" # change to your real ip.
 export MASTER_PORT=40041 # some unused port.
