@@ -1,6 +1,6 @@
-# VindLU
+# VindLU :curry:
 
-VindLU: A Recipe for Effective Video-and-Language Pretraining [[arXiv]()] [[project page](https://klauscc.github.io/vindlu.html)]
+VindLU :curry: : A Recipe for Effective Video-and-Language Pretraining [[arXiv]()] [[project page](https://klauscc.github.io/vindlu.html)]
 
 [Feng Cheng](https://klauscc.github.io), [Xizi Wang](), [Jie Lei](https://jayleicn.github.io/), [David Crandall](https://luddy.indiana.edu/contact/profile/?David_Crandall), [Mohit Bansal](http://www.cs.unc.edu/~mbansal/), [Gedas Bertasius](https://www.gedasbertasius.com/)
 
