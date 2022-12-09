@@ -31,13 +31,16 @@ inputs = dict(
 )
 
 # ========================= model ==========================
+vision_enc = "beit"
+text_enc = "bert"
 model = dict(
-    vision_encoder=VisionEncoders["beit"],
-    text_encoder=TextEncoders["bert"],
+    vision_encoder="${VisionEncoders[${vision_enc}]}",
+    text_encoder="${TextEncoders[${text_enc}]}",
     temporal_modeling=dict(
         num_frames="${num_frames}",
         temporal_model_block="timesformer",
         temporal_model_position="last",
+        temporal_model_config=dict(input_dim="${model.vision_encoder.d_model}"),
         use_temporal_position_embedding=True,
     ),
     vit_add_ln=True,

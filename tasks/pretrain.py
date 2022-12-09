@@ -100,7 +100,7 @@ def train(
 
         global_step += 1
 
-        if config.debug and global_step % 2 == 0:
+        if config.debug and global_step % 20 == 0:
             logger.info("debug mode, break training loop")
             break
 
