@@ -22,15 +22,30 @@ Official PyTorch code for VindLU, a recipe for effective Video-and-Language (Vid
 
 ## Results
 
-##### Text-to-video Retrieval
-<p align="center">
-<img src="./imgs/t2v_acc.png" style="width: 95%">
-</p>
+##### Text-to-Video Retrieval (R@1 accuracy).
+| Pretrained Data | MSR-VTT  | DiDeMo   | ANet     | SSV2-Label | SSv2-Template | Checkpoints                                                                                      |
+|-----------------|----------|----------|----------|------------|---------------|--------------------------------------------------------------------------------------------------|
+| 5M              | 43.8     | 54.6     | 51.1     | 51.2       | 82.2          | [model](https://drive.google.com/drive/folders/1AE3K9wP-HdZHaJ-j0VTKVhVxurhDnS70?usp=share_link) |
+| 17M             | 45.3     | 59.2     | 54.4     | 53.0       | **86.2**      | [model](https://drive.google.com/drive/folders/1AEvMylQ9Pta1CVDSA_wQdBLMmFaV5UHI?usp=share_link) |
+| 25M             | **46.5** | **61.2** | **55.0** | **53.1**   | 83.3          | [model](https://drive.google.com/drive/folders/1AH4HUd9a7TnRY14N0uErvoA4i1rgT1GK?usp=share_link) |
 
-##### More Tasks
-<p align="center">
-<img src="./imgs/vqa_res.png" style="width: 95%">
-</p>
+##### Video Question Answering (Top-1 accuracy).
+| Pretrained Data | ANet-QA  | MSRVTT-QA | MSRVTT-MC | TVQA     | Checkpoints                                                                                      |
+|-----------------|----------|-----------|-----------|----------|--------------------------------------------------------------------------------------------------|
+| 5M              | 44.2     | 43.6      | 95.2      | **79.0** | [model](https://drive.google.com/drive/folders/1AE3K9wP-HdZHaJ-j0VTKVhVxurhDnS70?usp=share_link) |
+| 17M             | 44.6     | 43.8      | 96.7      | 78.8     | [model](https://drive.google.com/drive/folders/1AEvMylQ9Pta1CVDSA_wQdBLMmFaV5UHI?usp=share_link) |
+| 25M             | **44.7** | **44.6**  | **97.1**  | **79.0** | [model](https://drive.google.com/drive/folders/1AH4HUd9a7TnRY14N0uErvoA4i1rgT1GK?usp=share_link) |
+
+
+<!-- ##### Text-to-video Retrieval -->
+<!-- <p align="center"> -->
+<!-- <img src="./imgs/t2v_acc.png" style="width: 95%"> -->
+<!-- </p> -->
+
+<!-- ##### More Tasks -->
+<!-- <p align="center"> -->
+<!-- <img src="./imgs/vqa_res.png" style="width: 95%"> -->
+<!-- </p> -->
 
 
 ## Setup
