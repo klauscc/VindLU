@@ -109,8 +109,6 @@ All the tasks can be launched via the python script `tools/run.py`.
 
 > It will use slurm if command `sbatch` exists. You can force to run locally by add the argument `--no_slurm`.
 
-**Our trained checkpoints are available on [Google Drive](https://drive.google.com/drive/folders/12bC7WotvwyTG4pVvYeU4iZzmBLP1-6d9?usp=sharing)**
-
 Usage:
 ``` bash
 python tools/run.py --slurm_args SLURM_ARGS --jobname JOBNAME \
