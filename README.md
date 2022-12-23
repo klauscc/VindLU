@@ -1,6 +1,6 @@
 # VindLU <img src="./imgs/vindlu.png" style="width: 40px">
 
-VindLU <img src="./imgs/vindlu.png" style="width: 20px">: A Recipe for Effective Video-and-Language Pretraining [[arXiv]()] [[project page](https://klauscc.github.io/vindlu.html)]
+VindLU <img src="./imgs/vindlu.png" style="width: 20px">: A Recipe for Effective Video-and-Language Pretraining [[arXiv](https://arxiv.org/abs/2212.05051)] [[project page](https://klauscc.github.io/vindlu.html)]
 
 [Feng Cheng](https://klauscc.github.io), [Xizi Wang](), [Jie Lei](https://jayleicn.github.io/), [David Crandall](https://luddy.indiana.edu/contact/profile/?David_Crandall), [Mohit Bansal](http://www.cs.unc.edu/~mbansal/), [Gedas Bertasius](https://www.gedasbertasius.com/)
 
@@ -242,3 +242,16 @@ python tools/run.py --nnodes 1 --ngpus 1 --task retrieval_mc \
 
 ## Acknowledgement
 This code used resources from [Singularity](https://github.com/jayleicn/singularity), [transformers](https://github.com/huggingface/transformers), [ALBEF](https://github.com/salesforce/ALBEF), [ClipBERT](https://github.com/jayleicn/ClipBERT), [frozen](https://github.com/m-bain/frozen-in-time). The code is implemented using PyTorch. We thank the authors for open-sourcing their awesome projects.
+
+## Citation
+
+If you find this project useful for your research, please use the following BibTeX entry.
+
+``` bibtex
+@article{cheng2022vindlu,
+  title={VindLU: A Recipe for Effective Video-and-Language Pretraining},
+  author={Cheng, Feng and Wang, Xizi and Lei, Jie and Crandall, David and Bansal, Mohit and Bertasius, Gedas},
+  journal={arXiv preprint arXiv:2212.05051},
+  year={2022}
+}
+```
